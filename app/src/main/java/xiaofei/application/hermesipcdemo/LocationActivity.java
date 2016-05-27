@@ -58,6 +58,7 @@ public class LocationActivity extends AppCompatActivity {
         mCityTextView = (EditText) findViewById(R.id.location_city);
         mCancelButton = (Button) findViewById(R.id.location_cancel);
         mSaveButton = (Button) findViewById(R.id.location_save);
+        //先设为不可点击，在Hermes连接上后再变为可点击
         mCancelButton.setClickable(false);
         mSaveButton.setClickable(false);
         mCancelButton.setOnClickListener(new View.OnClickListener() {
@@ -72,29 +73,38 @@ public class LocationActivity extends AppCompatActivity {
                 mLocation.setCountry(mCountryEditText.getText().toString());
                 mLocation.setProvince(mProvinceEditText.getText().toString());
                 mLocation.setCity(mCityTextView.getText().toString());
+                //下面这个操作咋一看以为是操作本地单例，其实操作的是主进程的单例。
                 mUserStorage.setUserInfo(mUserInfo);
                 finish();
             }
         });
+        //在连接之前给Hermes设置监听器
         Hermes.setHermesListener(new HermesListener() {
+
             @Override
-            public void onInitSuccess(Class<? extends HermesService> service) {
+            public void onHermesConnected(Class<? extends HermesService> service) {
+                //连接成功，首先获取单例
                 mUserStorage = Hermes.getInstance(IUserStorage.class);
+                //将按钮变为可点击
                 mSaveButton.setClickable(true);
                 mCancelButton.setClickable(true);
+                //通过单例获取UserInfo
                 mUserInfo = mUserStorage.getUserInfo();
                 mLocation = mUserInfo.getLocation();
+                //更新界面
                 mCountryEditText.setText(mLocation.getCountry());
                 mProvinceEditText.setText(mLocation.getProvince());
                 mCityTextView.setText(mLocation.getCity());
             }
         });
+        //连接Hermes服务
         Hermes.connect(this);
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        //断开Hermes服务
         Hermes.disconnect(this);
     }
 }

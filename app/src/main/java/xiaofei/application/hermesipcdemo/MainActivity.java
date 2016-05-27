@@ -51,13 +51,16 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        //Hermes注册被子进程共享的类
         Hermes.register(UserStorage.class);
+        //初始化各个控件
         mNameEditText = (EditText) findViewById(R.id.main_name);
         mCompanyEditText = (EditText) findViewById(R.id.main_company);
         mLocationTextView = (TextView) findViewById(R.id.main_location);
         mLocationTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //打开收集所在地的Activity
                 startActivity(new Intent(getApplicationContext(), LocationActivity.class));
             }
         });
@@ -65,6 +68,7 @@ public class MainActivity extends AppCompatActivity {
         mSaveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //获取对应的数据，并保存。
                 mUserInfo.setName(mNameEditText.getText().toString());
                 mUserInfo.setCompany(mCompanyEditText.getText().toString());
                 mUserStorage.setUserInfo(mUserInfo);
@@ -78,17 +82,21 @@ public class MainActivity extends AppCompatActivity {
                 mUserStorage.setUserInfo(mUserInfo);
             }
         });
+        //获取单例
+        mUserStorage = UserStorage.getInstance();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        mUserStorage = UserStorage.getInstance();
+        //以下操作放在onResume里，这样在子Activity返回这里的时候，信息会及时更新
+        //获取UserInfo
         mUserInfo = mUserStorage.getUserInfo();
         if (mUserInfo == null) {
             mUserInfo = new UserInfo();
             mUserStorage.setUserInfo(mUserInfo);
         }
+        //更新界面
         mNameEditText.setText(mUserInfo.getName());
         mCompanyEditText.setText(mUserInfo.getCompany());
         Location location = mUserInfo.getLocation();
