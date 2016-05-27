@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="hermes-0.5">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/app/build/intermediates/exploded-aar/xiaofei.library/hermes/0.5/jars/classes.jar!/" />
+      <root url="file://$PROJECT_DIR$/app/build/intermediates/exploded-aar/xiaofei.library/hermes/0.5/res" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/xiaofei.library/hermes/0.5/8d79eebd233708561cb8dcf6dde9e7772129e009/hermes-0.5-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
