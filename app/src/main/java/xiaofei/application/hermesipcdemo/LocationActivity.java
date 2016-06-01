@@ -58,9 +58,6 @@ public class LocationActivity extends AppCompatActivity {
         mCityTextView = (EditText) findViewById(R.id.location_city);
         mCancelButton = (Button) findViewById(R.id.location_cancel);
         mSaveButton = (Button) findViewById(R.id.location_save);
-        //先设为不可点击，在Hermes连接上后再变为可点击
-        mCancelButton.setClickable(false);
-        mSaveButton.setClickable(false);
         mCancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -85,9 +82,6 @@ public class LocationActivity extends AppCompatActivity {
             public void onHermesConnected(Class<? extends HermesService> service) {
                 //连接成功，首先获取单例
                 mUserStorage = Hermes.getInstance(IUserStorage.class);
-                //将按钮变为可点击
-                mSaveButton.setClickable(true);
-                mCancelButton.setClickable(true);
                 //通过单例获取UserInfo
                 mUserInfo = mUserStorage.getUserInfo();
                 mLocation = mUserInfo.getLocation();
